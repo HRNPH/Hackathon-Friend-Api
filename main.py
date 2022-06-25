@@ -16,8 +16,7 @@ app.add_middleware(
 
 # connect to monogdb server db and return all contents
 def get_article():
-    password = 'signal2020'
-    client = pymongo.MongoClient(f"mongodb://hrnph:{password}:@hackathonfriend-shard-00-00.5juva.mongodb.net:27017,hackathonfriend-shard-00-01.5juva.mongodb.net:27017,hackathonfriend-shard-00-02.5juva.mongodb.net:27017/?ssl=true&replicaSet=atlas-ka8mw2-shard-0&authSource=admin&retryWrites=true&w=majority")
+    client = pymongo.MongoClient(f"mongodb://hrnph:signal2020:@hackathonfriend-shard-00-00.5juva.mongodb.net:27017,hackathonfriend-shard-00-01.5juva.mongodb.net:27017,hackathonfriend-shard-00-02.5juva.mongodb.net:27017/?ssl=true&replicaSet=atlas-ka8mw2-shard-0&authSource=admin&retryWrites=true&w=majority")
     db = client.test
     data = client['contents']
     return data
