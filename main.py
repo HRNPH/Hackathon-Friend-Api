@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import pymongo
 import urllib
+import os
 
 # create app
 app = FastAPI()
@@ -17,25 +18,30 @@ app.add_middleware(
 
 # connect to monogdb server db and return all contents
 def get_article():
-    qrstring = "mongodb://hrnph:signal2020:@hackathonfriend-shard-00-00.5juva.mongodb.net:27017,hackathonfriend-shard-00-01.5juva.mongodb.net:27017,hackathonfriend-shard-00-02.5juva.mongodb.net:27017/?ssl=true&replicaSet=atlas-ka8mw2-shard-0&authSource=admin&retryWrites=true&w=majority"
+    qrstring = "mongodb+srv://hrnph:signal2020@hackathonfriend.5juva.mongodb.net/?retryWrites=true&w=majority"
     # urlendcode qrstring
     qrstring = urllib.parse.quote_plus(qrstring)
     client = pymongo.MongoClient(qrstring)
-    print("Error: Unable to connect to database")
-    db = client.test
-    data = client['contents']
 
-    return data
+    return client
 
 
 # create index route
 @app.get("/")
 def index():
-    return {"routes": '/api'}
+    return {"routes": '/home'}
 
 # create /api routes
 @app.get("/home")
 def get_home():
     # return data.image
     data = get_article()
+    return {'data': data}
+
+@app.post("/create_camp")
+# receive data from client and create a new camp
+def create_camp(data):
+    # save data to mongodb
+    data = get_article()
+    data.insert_one(data)
     return {'data': data}
