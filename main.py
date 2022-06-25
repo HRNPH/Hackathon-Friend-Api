@@ -20,10 +20,14 @@ app.add_middleware(
 def get_article():
     qrstring = "mongodb+srv://hrnph:signal2020@hackathonfriend.5juva.mongodb.net/?retryWrites=true&w=majority"
     # urlendcode qrstring
-    qrstring = urllib.parse.quote_plus(qrstring)
     client = pymongo.MongoClient(qrstring)
+    database = client.get_database('contents')
+    records = database.camp
 
-    return client
+    # get all records
+    records = records.find()
+    # return list of record
+    return list(records)
 
 
 # create index route
@@ -44,4 +48,4 @@ def create_camp(data):
     # save data to mongodb
     data = get_article()
     data.insert_one(data)
-    return {'data': data}
+    return {'data': str(data)}
