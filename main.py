@@ -11,7 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 client = motor.motor_asyncio.AsyncIOMotorClient('mongodb+srv://hrnph:signal2020@hackathonfriend.5juva.mongodb.net/?retryWrites=true&w=majority')
-db = client.college
+db = client.posts
 # allow cross origin
 app.add_middleware(
     CORSMiddleware,
@@ -55,7 +55,7 @@ class userpost(BaseModel):
 
 
 
-@app.post("/", response_description="Add new userpost", response_model=userpost)
+@app.post("/posts", response_description="Add new userpost", response_model=userpost)
 async def create_userpost(userpost: userpost = Body(...)):
     userpost = jsonable_encoder(userpost)
     new_userpost = await db["userposts"].insert_one(userpost)
@@ -63,17 +63,13 @@ async def create_userpost(userpost: userpost = Body(...)):
     return JSONResponse(status_code=status.HTTP_201_CREATED, content=created_userpost)
 
 
-@app.get(
-    "/", response_description="List all userposts", response_model=List[userpost]
-)
+@app.get("/posts", response_description="List all userposts", response_model=List[userpost])
 async def list_userposts():
     userposts = await db["userposts"].find().to_list(1000)
     return userposts
 
 
-@app.get(
-    "/{id}", response_description="Get a single userpost", response_model=userpost
-)
+@app.get("/posts/{id}", response_description="Get a single userpost", response_model=userpost)
 async def show_userpost(id: str):
     if (userpost := await db["userposts"].find_one({"_id": id})) is not None:
         return userpost
