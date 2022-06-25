@@ -40,7 +40,7 @@ class PyObjectId(ObjectId):
 class userpost(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     name: str = Field(...)
-    detail: EmailStr = Field(...)
+    detail: str = Field(...)
 
     class Config:
         allow_population_by_field_name = True
