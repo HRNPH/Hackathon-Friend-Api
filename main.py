@@ -20,11 +20,8 @@ def get_article():
     qrstring = "mongodb://hrnph:signal2020:@hackathonfriend-shard-00-00.5juva.mongodb.net:27017,hackathonfriend-shard-00-01.5juva.mongodb.net:27017,hackathonfriend-shard-00-02.5juva.mongodb.net:27017/?ssl=true&replicaSet=atlas-ka8mw2-shard-0&authSource=admin&retryWrites=true&w=majority"
     # urlendcode qrstring
     qrstring = urllib.parse.quote_plus(qrstring)
-    try:
-        client = pymongo.MongoClient(qrstring)
-    except all:
-        print("Error: Unable to connect to database")
-        return 'error'
+    client = pymongo.MongoClient(qrstring)
+    print("Error: Unable to connect to database")
     db = client.test
     data = client['contents']
 
